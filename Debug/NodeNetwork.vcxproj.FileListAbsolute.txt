@@ -1,0 +1,2 @@
+C:\Users\sande\source\repos\NodeNetwork\Debug\NodeNetwork.exe
+C:\Users\sande\source\repos\NodeNetwork\Debug\NodeNetwork.pdb
