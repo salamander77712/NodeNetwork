@@ -1,4 +1,9 @@
-﻿  InputNode.cpp
-  NodeNetwork.cpp
-  Generating Code...
+﻿  Network.cpp
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(12,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(21,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(31,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(37,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(42,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(49,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\Network.cpp(54,21): warning C4018: '<': signed/unsigned mismatch
   NodeNetwork.vcxproj -> C:\Users\sande\source\repos\NodeNetwork\Debug\NodeNetwork.exe

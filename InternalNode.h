@@ -9,6 +9,7 @@ protected:
 	std::vector<double> inputs;
 	double sigmoid(double n);
 public:
+	InternalNode();
 	InternalNode(int inputSize);
 	double getValue();
 	void setInputs(std::vector<double> newInputs);

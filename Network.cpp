@@ -1,6 +1,8 @@
 #include "Network.h"
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
 Network::Network(int inputSize, std::vector<std::vector<int>> internalLayers, int outputSize, std::vector<std::string> outputNames) {
 	num_inputs = inputSize;
 	num_outputs = outputSize;
@@ -79,4 +81,17 @@ std::string Network::computeAndLearn(std::vector<double> data, std::string corre
 	std::string output = compute(data);
 	learn(correctValue);
 	return output;
+}
+void Network::save(std::string file) {
+	std::ofstream saveFile(file);
+	saveFile << "Network" << "\n";
+	saveFile << "Input" << "\n";
+	saveFile << num_inputs << "\n";
+	for (int i = 0; i < internalNodes.size(); i++) {
+		saveFile << "Layer" << i << "\n";
+		for (int j = 0; j < internalNodes[i].size(); j++) {
+
+		}
+	}
+	saveFile.close();
 }

@@ -2,13 +2,18 @@
 //
 
 #include <iostream>
-#include "InputNode.h"
+#include <vector>
+#include <string>
+#include "Network.h"
 
 int main()
 {
-    InputNode n;
-    n.setValue(0.89542);
-    std::cout << n.getValue();
+    int input = 10;
+    std::vector<std::vector<int>> layers = { {9},{8},{7} };
+    int output = 6;
+    std::vector<std::string> names = { "5", "4", "3", "2", "1", "0" };
+    Network n(input, layers, output, names);
+    n.save("test.txt");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

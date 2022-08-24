@@ -2,13 +2,18 @@
 #include <vector>
 #include <stdexcept>
 #include <math.h>
+InternalNode::InternalNode() {
+	num_inputs = 0;
+	bias = 0;
+	value = 0;
+}
 InternalNode::InternalNode(int inputSize) {
 	num_inputs = inputSize;
 	bias = 0;
 	value = 0;
 }
-double sigmoid(double n) {
-	return (1 / (1 + exp(-n));
+double InternalNode::sigmoid(double n) {
+	return (1 / (1 + exp(-n)));
 }
 double InternalNode::getValue() {
 	return value;
