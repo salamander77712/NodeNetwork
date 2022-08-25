@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-Network::Network(int inputSize, std::vector<std::vector<int>> internalLayers, int outputSize, std::vector<std::string> outputNames) {
+Network::Network(int inputSize, std::vector<int> internalLayers, int outputSize, std::vector<std::string> outputNames) {
 	num_inputs = inputSize;
 	num_outputs = outputSize;
 	for (int i = 0; i < num_inputs; i++) {
@@ -16,13 +16,13 @@ Network::Network(int inputSize, std::vector<std::vector<int>> internalLayers, in
 			previousLayerSize = inputSize;
 		}
 		else{
-			previousLayerSize = internalLayers[i - 1].size();
+			previousLayerSize = internalLayers[i - 1];
 		}
-		for (int j = 0; j < internalLayers[i].size(); j++) {
+		for (int j = 0; j < internalLayers[i]; j++) {
 			internalNodes[i].push_back(InternalNode(previousLayerSize));
 		}
 	}
-	int previousLayerSize = internalLayers[internalLayers.size() - 1].size();
+	int previousLayerSize = internalLayers[internalLayers.size() - 1];
 	for (int i = 0; i < num_outputs; i++) {
 		outputNodes.push_back(OutputNode(outputNames[i], previousLayerSize));
 	}
@@ -85,13 +85,40 @@ std::string Network::computeAndLearn(std::vector<double> data, std::string corre
 void Network::save(std::string file) {
 	std::ofstream saveFile(file);
 	saveFile << "Network" << "\n";
-	saveFile << "Input" << "\n";
+	saveFile << "Structure" << "\n";
+	saveFile << "Inputs" << "\n";
 	saveFile << num_inputs << "\n";
+	saveFile << "Internal Layers" << "\n";
+	saveFile << internalNodes.size() << "\n";
 	for (int i = 0; i < internalNodes.size(); i++) {
-		saveFile << "Layer" << i << "\n";
+		saveFile << "Layer " << i << " Size" << "\n";
+		saveFile << internalNodes[i].size() << "\n";
+	}
+	saveFile << "Outputs" << "\n";
+	saveFile << num_outputs << "\n";
+	saveFile << "State" << "\n";
+	for (int i = 0; i < internalNodes.size(); i++) {
+		saveFile << "Layer " << i << "\n";
+		saveFile << "Size" << "\n";
+		saveFile << internalNodes[i].size() << "\n";
 		for (int j = 0; j < internalNodes[i].size(); j++) {
-
+			saveFile << "Internal Node " << j << "\n";
+			saveFile << "Bias" << "\n";
+			saveFile << internalNodes[i][j].getBias() << "\n";
+			saveFile << "Weights" << "\n";
+			saveFile << internalNodes[i][j].getWeights() << "\n";
 		}
 	}
+	saveFile << "Output Nodes" << "\n";
+	for (int i = 0; i < outputNodes.size(); i++) {
+		saveFile << "Ouput Node" << "\n";
+		saveFile << "Name" << "\n";
+		saveFile << outputNodes[i].getName() << "\n";
+		saveFile << "Bias" << "\n";
+		saveFile << outputNodes[i].getBias() << "\n";
+		saveFile << "Weights" << "\n";
+		saveFile << outputNodes[i].getWeights() << "\n";
+	}
+	saveFile << "End";
 	saveFile.close();
 }

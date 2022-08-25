@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 class InternalNode {
 protected:
 	double value;
@@ -12,6 +13,8 @@ public:
 	InternalNode();
 	InternalNode(int inputSize);
 	double getValue();
+	double getBias();
+	std::string getWeights();
 	void setInputs(std::vector<double> newInputs);
 	void calculateValue();
 };

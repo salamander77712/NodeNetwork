@@ -15,7 +15,7 @@ private:
 	void calculate();
 	void learn(std::string correctValue);
 public:
-	Network(int inputSize, std::vector<std::vector<int>> internalLayers, int outputSize, std::vector<std::string> outputNames);
+	Network(int inputSize, std::vector<int> internalLayers, int outputSize, std::vector<std::string> outputNames);
 	std::string compute(std::vector<double> data);
 	std::string computeAndLearn(std::vector<double> data, std::string correctValue);
 	void load(std::string file);

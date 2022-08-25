@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include <math.h>
+#include <string>
 InternalNode::InternalNode() {
 	num_inputs = 0;
 	bias = 0;
@@ -11,6 +12,9 @@ InternalNode::InternalNode(int inputSize) {
 	num_inputs = inputSize;
 	bias = 0;
 	value = 0;
+	for (int i = 0; i < inputSize; i++) {
+		weights.push_back(0);
+	}
 }
 double InternalNode::sigmoid(double n) {
 	return (1 / (1 + exp(-n)));
@@ -30,4 +34,18 @@ void InternalNode::calculateValue() {
 		value += inputs[i] * weights[i];
 	}
 	value = sigmoid(value);
+}
+double InternalNode::getBias() {
+	return bias;
+}
+std::string InternalNode::getWeights() {
+	std::string output = "{";
+	for (int i = 0; i < weights.size(); i++) {
+		output += std::to_string(weights[i]);
+		if (i != weights.size() - 1) {
+			output += ",";
+		}
+	}
+	output += "}";
+	return output;
 }
