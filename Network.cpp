@@ -61,7 +61,34 @@ void Network::calculate() {
 	}
 }
 void Network::learn(std::string correctValue) {
-	//TODO
+	std::vector<std::vector<double>> wantedInputs;
+	double cost = 0;
+	for (int i = 0; i < num_outputs; i++) {
+		double expectedValue = 0;
+		if (outputNodes[i].getName() == correctValue) {
+			expectedValue = 1;
+		}
+		cost += (outputNodes[i].getValue() - expectedValue) * (outputNodes[i].getValue() - expectedValue);
+	}
+	for (int i = 0; i < num_outputs; i++) {
+		double expectedValue = 0;
+		if (outputNodes[i].getName() == correctValue) {
+			expectedValue = 1;
+		}
+		wantedInputs.push_back(outputNodes[i].learn(expectedValue, .1));
+	}
+	for (int i = 0; i < internalNodes.size(); i++) {
+		std::vector<std::vector<double>> _wantedInputs;
+		for (int j = 0; j < internalNodes[i].size(); j++) {
+			double expectedValue = 0;
+			for (int k = 0; k < wantedInputs.size(); k++) {
+				expectedValue += wantedInputs[k][j];
+			}
+			expectedValue /= wantedInputs.size();
+			_wantedInputs.push_back(internalNodes[i][j].learn(expectedValue, .1));
+		}
+		wantedInputs = _wantedInputs;
+	}
 	return;
 }
 std::string Network::compute(std::vector<double> data) {
@@ -82,42 +109,105 @@ std::string Network::computeAndLearn(std::vector<double> data, std::string corre
 	learn(correctValue);
 	return output;
 }
-void Network::save(std::string file) {
-	std::ofstream saveFile(file);
-	saveFile << "Network" << "\n";
-	saveFile << "Structure" << "\n";
-	saveFile << "Inputs" << "\n";
-	saveFile << num_inputs << "\n";
-	saveFile << "Internal Layers" << "\n";
-	saveFile << internalNodes.size() << "\n";
-	for (int i = 0; i < internalNodes.size(); i++) {
-		saveFile << "Layer " << i << " Size" << "\n";
-		saveFile << internalNodes[i].size() << "\n";
+std::vector<std::string> Network::computeAndLearnMass(std::vector<std::vector<double>> datas, std::vector<std::string> correctValues) {
+	std::vector<std::string> output;
+	for (int i = 0; i < datas.size(); i++) {
+		output.push_back(compute(datas[i]));
 	}
-	saveFile << "Outputs" << "\n";
-	saveFile << num_outputs << "\n";
-	saveFile << "State" << "\n";
-	for (int i = 0; i < internalNodes.size(); i++) {
-		saveFile << "Layer " << i << "\n";
-		saveFile << "Size" << "\n";
-		saveFile << internalNodes[i].size() << "\n";
-		for (int j = 0; j < internalNodes[i].size(); j++) {
-			saveFile << "Internal Node " << j << "\n";
-			saveFile << "Bias" << "\n";
-			saveFile << internalNodes[i][j].getBias() << "\n";
-			saveFile << "Weights" << "\n";
-			saveFile << internalNodes[i][j].getWeights() << "\n";
+	learnMass(datas, correctValues);
+	return output;
+}
+void Network::learnMass(std::vector<std::vector<double>> datas, std::vector<std::string> correctValues) {
+	double cost = 0;
+	for (int i = 0; i < datas.size(); i++) {
+		compute(datas[i]);
+		for (int j = 0; j < num_outputs; j++) {
+			double expectedValue = 0;
+			if (outputNodes[j].getName() == correctValues[i]) {
+				expectedValue = 1;
+			}
+			cost += (outputNodes[j].getValue() - expectedValue) * (outputNodes[j].getValue() - expectedValue);
 		}
 	}
-	saveFile << "Output Nodes" << "\n";
+	for (int m = 0; m < datas.size(); m++) {
+		for (int i = 0; i < num_outputs; i++) {
+			for (int j = 0; j < outputNodes[i].weights.size(); j++) {
+				double startingWeight = outputNodes[i].weights[j];
+				outputNodes[i].weights[j] += .1;
+				double costPlus = 0;
+				for (int k = 0; k < datas.size() && k <= m; k++) {
+					compute(datas[k]);
+					for (int l = 0; l < num_outputs; l++) {
+						double expectedValue = 0;
+						if (outputNodes[l].getName() == correctValues[k]) {
+							expectedValue = 1;
+						}
+						costPlus += (outputNodes[l].getValue() - expectedValue) * (outputNodes[l].getValue() - expectedValue);
+					}
+				}
+				outputNodes[i].weights[j] -= .2;
+				double costLess = 0;
+				for (int k = 0; k < datas.size() && k <= m; k++) {
+					compute(datas[k]);
+					for (int l = 0; l < num_outputs; l++) {
+						double expectedValue = 0;
+						if (outputNodes[l].getName() == correctValues[k]) {
+							expectedValue = 1;
+						}
+						costLess += (outputNodes[l].getValue() - expectedValue) * (outputNodes[l].getValue() - expectedValue);
+					}
+				}
+				if (costPlus < cost) {
+					if (costPlus < costLess) {
+						outputNodes[i].weights[j] += .2;
+						//std::cout << "Weight Increased" << std::endl;
+					}
+				}
+				else if (cost < costLess) {
+					outputNodes[i].weights[j] += .1;
+					//std::cout << "Weight Static" << std::endl;
+				}
+				//std::cout << "Weight Decreased" << std::endl;
+			}
+		}
+	}
+}
+void Network::save(std::string file) {
+	std::ofstream saveFile(file);
+	saveFile << "Network" << std::endl;
+	saveFile << "Structure" << std::endl;
+	saveFile << "Inputs" << std::endl;
+	saveFile << num_inputs << std::endl;
+	saveFile << "Internal Layers" << std::endl;
+	saveFile << internalNodes.size() << std::endl;
+	for (int i = 0; i < internalNodes.size(); i++) {
+		saveFile << "Layer " << i << " Size" << std::endl;
+		saveFile << internalNodes[i].size() << std::endl;
+	}
+	saveFile << "Outputs" << std::endl;
+	saveFile << num_outputs << std::endl;
+	saveFile << "State" << std::endl;
+	for (int i = 0; i < internalNodes.size(); i++) {
+		saveFile << "Layer " << i << std::endl;
+		saveFile << "Size" << std::endl;
+		saveFile << internalNodes[i].size() << std::endl;
+		for (int j = 0; j < internalNodes[i].size(); j++) {
+			saveFile << "Internal Node " << j << std::endl;
+			saveFile << "Bias" << std::endl;
+			saveFile << internalNodes[i][j].getBias() << std::endl;
+			saveFile << "Weights" << std::endl;
+			saveFile << internalNodes[i][j].getWeights() << std::endl;
+		}
+	}
+	saveFile << "Output Nodes" << std::endl;
 	for (int i = 0; i < outputNodes.size(); i++) {
-		saveFile << "Ouput Node" << "\n";
-		saveFile << "Name" << "\n";
-		saveFile << outputNodes[i].getName() << "\n";
-		saveFile << "Bias" << "\n";
-		saveFile << outputNodes[i].getBias() << "\n";
-		saveFile << "Weights" << "\n";
-		saveFile << outputNodes[i].getWeights() << "\n";
+		saveFile << "Ouput Node" << std::endl;
+		saveFile << "Name" << std::endl;
+		saveFile << outputNodes[i].getName() << std::endl;
+		saveFile << "Bias" << std::endl;
+		saveFile << outputNodes[i].getBias() << std::endl;
+		saveFile << "Weights" << std::endl;
+		saveFile << outputNodes[i].getWeights() << std::endl;
 	}
 	saveFile << "End";
 	saveFile.close();

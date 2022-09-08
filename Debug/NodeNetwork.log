@@ -1,2 +1,5 @@
 ﻿  NodeNetwork.cpp
+C:\Users\sande\source\repos\NodeNetwork\NodeNetwork.cpp(45,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\NodeNetwork.cpp(57,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sande\source\repos\NodeNetwork\NodeNetwork.cpp(68,23): warning C4018: '<': signed/unsigned mismatch
   NodeNetwork.vcxproj -> C:\Users\sande\source\repos\NodeNetwork\Debug\NodeNetwork.exe

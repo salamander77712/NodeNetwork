@@ -1,0 +1,64 @@
+Network
+Structure
+Inputs
+2
+Internal Layers
+1
+Layer 0 Size
+4
+Outputs
+4
+State
+Layer 0
+Size
+4
+Internal Node 0
+Bias
+0
+Weights
+{0.001251,0.563585}
+Internal Node 1
+Bias
+0
+Weights
+{0.193304,0.808741}
+Internal Node 2
+Bias
+0
+Weights
+{0.585009,0.479873}
+Internal Node 3
+Bias
+0
+Weights
+{0.350291,0.895962}
+Output Nodes
+Ouput Node
+Name
+0
+Bias
+0
+Weights
+{23.022840,-12.253395,-0.025892,-10.541057}
+Ouput Node
+Name
+1
+Bias
+0
+Weights
+{0.910501,1.713535,-26.296005,21.414985}
+Ouput Node
+Name
+2
+Bias
+0
+Weights
+{-8.708597,-3.035548,25.747313,-16.834101}
+Ouput Node
+Name
+3
+Bias
+0
+Weights
+{-20.011475,7.845692,-2.080917,10.804669}
+End

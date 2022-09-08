@@ -6,7 +6,7 @@ OutputNode::OutputNode(std::string nodeName, int inputSize) {
 	value = 0;
 	name = nodeName;
 	for (int i = 0; i < inputSize; i++) {
-		weights.push_back(0);
+		weights.push_back((double)rand() / RAND_MAX);
 	}
 }
 std::string OutputNode::getName() {
